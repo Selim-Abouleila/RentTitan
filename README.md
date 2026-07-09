@@ -3,6 +3,7 @@
 RentTitan helps tenants create a clear rental dossier and receive a dossier strength score out of 100. 
 
 ## Documentation
+- [Getting Started Guide](docs/doc-0-getting-started.md)
 - [OAuth Initialization & Setup](docs/doc-1-oauth.md)
 
 ## Tech Stack
