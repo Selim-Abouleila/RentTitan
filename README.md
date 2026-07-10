@@ -33,6 +33,7 @@ graph TD
 | [OAuth Initialization & Setup](docs/doc-1-oauth.md) | Details the Google OAuth 2.0 flow and how to configure client credentials. |
 | [Frontend & Backend Architecture](docs/doc-2-frontend-backend.md) | Overview of the React component structure and the Express routing/auth flow. |
 | [Database Architecture](docs/doc-3-database.md) | Outlines the Docker infrastructure and the PostgreSQL/Prisma schema for users and dossiers. |
+| [AI Landlord Pitch](docs/doc-5-ai-pitch.md) | Explains the Gemini AI integration, JWT forwarding, and presentation fallback logic. |
 | [Microservices Architecture](docs/doc-4-microservices.md) | Describes the modular services integration and inter-service communication. |
 
 ## Tech Stack
