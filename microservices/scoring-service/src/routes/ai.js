@@ -19,7 +19,7 @@ router.post('/generate-pitch', authenticateJWT, async (req, res) => {
 
     // Call actual Gemini API
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
     const prompt = `Write a polite, highly professional, 3-sentence introductory message in French to a landlord for a tenant. The tenant has a dossier score of ${score}/100. Based on these suggestions: ${suggestions.join(', ')}. Keep it extremely professional and do not use placeholders like [Your Name].`;
 
