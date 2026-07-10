@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
+// Middleware: Intercepts requests to verify the JSON Web Token (JWT) from the Authorization header.
+// If valid, attaches the decoded user payload to req.user and allows the request to proceed. Otherwise, returns a 401/403 error.
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
 

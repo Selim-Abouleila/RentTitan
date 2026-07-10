@@ -6,6 +6,8 @@ dotenv.config();
 
 const prisma = require('../prisma');
 
+// Configures Passport to use the Google OAuth 2.0 strategy. 
+// It intercepts the Google profile data, looks up the user in the PostgreSQL database, and creates a new user if they don't exist.
 passport.use(
   new GoogleStrategy(
     {
