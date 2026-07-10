@@ -19,7 +19,7 @@ app.use(express.json());
 // Routes
 app.use('/api/v1/ai', aiRouter);
 
-// 1. REST API Paradigm
+// 1. REST API Paradigm: Exposes the dossier score calculation via a standard HTTP GET endpoint.
 app.get('/api/v1/dossier-score', authenticateJWT, async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -41,7 +41,7 @@ app.get('/api/v1/dossier-score', authenticateJWT, async (req, res) => {
   }
 });
 
-// 2. GraphQL API Paradigm
+// 2. GraphQL API Paradigm: Exposes a flexible data-fetching interface for the frontend to query the score and suggestions.
 async function startServer() {
   const server = new ApolloServer({
     typeDefs,

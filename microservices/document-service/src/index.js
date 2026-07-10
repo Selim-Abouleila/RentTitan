@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to MongoDB for Document Service'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// GET /status - Returns the current checklist for the user
+// GET /status: Retrieves the user's document upload checklist status from MongoDB.
 app.get('/status', authenticateJWT, async (req, res) => {
   try {
     let checklist = await Checklist.findOne({ userId: req.user.id });
@@ -37,7 +37,7 @@ app.get('/status', authenticateJWT, async (req, res) => {
   }
 });
 
-// POST /upload - Accepts a dummy file and updates the flags/counts in MongoDB
+// POST /upload: Simulates document upload by updating the checklist flags in MongoDB.
 app.post('/upload', authenticateJWT, upload.single('document'), async (req, res) => {
   try {
     const { documentType } = req.body;
@@ -74,7 +74,7 @@ app.post('/upload', authenticateJWT, upload.single('document'), async (req, res)
   }
 });
 
-// DELETE /documents/:documentType - Removes a document (decrements count or sets to false)
+// DELETE /documents/:documentType: Simulates document removal by setting the corresponding checklist flag to false.
 app.delete('/documents/:documentType', authenticateJWT, async (req, res) => {
   try {
     const { documentType } = req.params;

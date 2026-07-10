@@ -3,6 +3,7 @@ const router = express.Router();
 const { GoogleGenAI } = require('@google/genai');
 const { authenticateJWT } = require('../middleware/auth');
 
+// POST /generate-pitch: Generates a highly personalized landlord pitch using Google Gemini based on the user's real financial context.
 router.post('/generate-pitch', authenticateJWT, async (req, res) => {
   try {
     const { score, suggestions } = req.body;

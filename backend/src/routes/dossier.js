@@ -3,7 +3,7 @@ const router = express.Router();
 const prisma = require('../prisma');
 const { authenticateJWT } = require('../middleware/auth');
 
-// Get current user's dossier
+// GET /: Fetches the financial profile (dossier) for the authenticated user, including their guarantors.
 router.get('/', authenticateJWT, async (req, res) => {
   try {
     const dossier = await prisma.dossier.findUnique({
@@ -22,7 +22,7 @@ router.get('/', authenticateJWT, async (req, res) => {
   }
 });
 
-// Create or update dossier
+// POST /: Upserts (creates or updates) the user's financial profile and guarantor list in the PostgreSQL database.
 router.post('/', authenticateJWT, async (req, res) => {
   try {
     const { targetRent, monthlyIncome, employmentStatus, guarantors } = req.body;

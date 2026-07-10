@@ -2,6 +2,7 @@ const { calculateScore } = require('../scoringEngine');
 
 const resolvers = {
   Query: {
+    // myDossier Resolver: Uses Token Forwarding to fetch financial and document data from the other microservices, then calculates the score.
     myDossier: async (_, __, context) => {
       if (!context.token) {
         throw new Error('Access denied: No token provided');

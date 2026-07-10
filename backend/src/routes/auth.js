@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-// Initiate Google Login
+// Initiates the Google OAuth 2.0 flow by redirecting the user to Google's consent screen.
 router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-// Google Login Callback
+// Callback URL for Google OAuth; issues a JWT token upon successful authentication and redirects to the frontend.
 router.get(
   '/google/callback',
   passport.authenticate('google', { session: false, failureRedirect: '/login-failed' }),
