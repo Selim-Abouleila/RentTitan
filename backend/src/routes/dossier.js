@@ -25,7 +25,7 @@ router.get('/', authenticateJWT, async (req, res) => {
 // Create or update dossier
 router.post('/', authenticateJWT, async (req, res) => {
   try {
-    const { targetRent, monthlyIncome, employmentStatus, hasGuarantor, guarantors } = req.body;
+    const { targetRent, monthlyIncome, employmentStatus, guarantors } = req.body;
     
     // Check if dossier already exists
     let dossier = await prisma.dossier.findUnique({
@@ -39,8 +39,7 @@ router.post('/', authenticateJWT, async (req, res) => {
         data: {
           targetRent: parseFloat(targetRent),
           monthlyIncome: parseFloat(monthlyIncome),
-          employmentStatus,
-          hasGuarantor,
+          employmentStatus
         }
       });
       
@@ -56,14 +55,13 @@ router.post('/', authenticateJWT, async (req, res) => {
           userId: req.user.id,
           targetRent: parseFloat(targetRent),
           monthlyIncome: parseFloat(monthlyIncome),
-          employmentStatus,
-          hasGuarantor,
+          employmentStatus
         }
       });
     }
 
     // Insert new guarantors if any
-    if (hasGuarantor && guarantors && guarantors.length > 0) {
+    if (guarantors && guarantors.length > 0) {
       const guarantorData = guarantors.map(g => ({
         dossierId: dossier.id,
         name: g.name,

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DossierForm from './DossierForm';
+import DocumentUpload from './DocumentUpload';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -79,6 +80,7 @@ const Dashboard = () => {
         </div>
 
         <DossierForm />
+        <DocumentUpload />
       </div>
     </div>
   );
