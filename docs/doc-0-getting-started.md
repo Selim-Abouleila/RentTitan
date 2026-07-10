@@ -28,8 +28,12 @@ The main backend handles authentication and serves as the primary API gateway.
    ```bash
    npm install
    ```
-4. Make sure your `.env` file is set up (see [OAuth Documentation](doc-1-oauth.md) for details).
-5. Start the development server:
+4. **Initialize the Database Schema**: Connect to the Postgres database and create the tables using Prisma:
+   ```bash
+   npx prisma migrate dev
+   ```
+5. Make sure your `.env` file is set up (see [OAuth Documentation](doc-1-oauth.md) for details).
+6. Start the development server:
    ```bash
    npm run dev
    ```
