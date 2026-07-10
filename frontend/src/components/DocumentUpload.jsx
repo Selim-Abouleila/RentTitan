@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
-const DocumentUpload = () => {
+const DocumentUpload = ({ onSave }) => {
   const [checklist, setChecklist] = useState({
     idCard: false,
     proofOfIncome: false,
@@ -12,6 +12,7 @@ const DocumentUpload = () => {
   const [selectedType, setSelectedType] = useState('idCard');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const fileInputRef = useRef(null);
 
   const documentTypes = [
     { value: 'idCard', label: 'Identity Card (ID)' },
@@ -71,7 +72,11 @@ const DocumentUpload = () => {
       if (response.ok) {
         setMessage('Document uploaded successfully!');
         setSelectedFile(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
         fetchStatus(); // Refresh checklist
+        if (onSave) onSave(); // Refresh dashboard score
       } else {
         setMessage('Upload failed.');
       }
@@ -93,6 +98,7 @@ const DocumentUpload = () => {
       if (response.ok) {
         setMessage('Document removed successfully.');
         fetchStatus();
+        if (onSave) onSave(); // Refresh dashboard score
       } else {
         setMessage('Failed to remove document.');
       }
@@ -140,6 +146,7 @@ const DocumentUpload = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-2">Upload File (Dummy PDF/Image)</label>
             <input 
               type="file"
+              ref={fileInputRef}
               onChange={(e) => setSelectedFile(e.target.files[0])}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
             />

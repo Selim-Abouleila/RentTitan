@@ -22,6 +22,7 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-black flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20 transform transition-all hover:scale-105">
         <div className="text-center">
+          <img src="/rent_titan_logo.png" alt="RentTitan Logo" className="mx-auto h-40 mb-6 object-contain drop-shadow-2xl hover:scale-105 transition-transform duration-300" />
           <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 mb-2">
             RentTitan
           </h1>

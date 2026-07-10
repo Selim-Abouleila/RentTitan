@@ -11,6 +11,7 @@ const DossierForm = ({ onSave }) => {
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [guarantorToDelete, setGuarantorToDelete] = useState(null);
 
   // Fetch existing dossier on mount
   useEffect(() => {
@@ -51,12 +52,22 @@ const DossierForm = ({ onSave }) => {
   };
 
   const handleRemoveGuarantor = (index) => {
-    const newGuarantors = formData.guarantors.filter((_, i) => i !== index);
+    setGuarantorToDelete(index);
+  };
+
+  const confirmDeleteGuarantor = () => {
+    if (guarantorToDelete === null) return;
+    const newGuarantors = formData.guarantors.filter((_, i) => i !== guarantorToDelete);
     setFormData({
       ...formData,
       guarantors: newGuarantors,
       hasGuarantor: newGuarantors.length > 0
     });
+    setGuarantorToDelete(null);
+  };
+
+  const cancelDeleteGuarantor = () => {
+    setGuarantorToDelete(null);
   };
 
   const handleGuarantorChange = (index, field, value) => {
@@ -216,6 +227,41 @@ const DossierForm = ({ onSave }) => {
           {loading ? 'Saving Profile...' : 'Save Profile & Calculate Baseline Score'}
         </button>
       </form>
+
+      {/* Beautiful Custom Delete Modal */}
+      {guarantorToDelete !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl transform transition-all scale-100 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-red-100 rounded-full">
+              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+              </svg>
+            </div>
+            <h3 className="text-2xl font-bold text-center text-gray-900 mb-2">Delete Guarantor?</h3>
+            <p className="text-center text-gray-500 mb-8 font-medium">
+              Are you sure you want to delete <span className="text-gray-800 font-bold">{formData.guarantors[guarantorToDelete]?.name || `Guarantor ${guarantorToDelete + 1}`}</span>?
+              <br/><br/>
+              <span className="text-xs opacity-75">This will be permanently removed from the database when you save your profile.</span>
+            </p>
+            <div className="flex gap-4">
+              <button 
+                type="button"
+                onClick={cancelDeleteGuarantor}
+                className="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button"
+                onClick={confirmDeleteGuarantor}
+                className="flex-1 px-4 py-3 text-white bg-red-600 hover:bg-red-700 rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all hover:-translate-y-0.5"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
