@@ -7,6 +7,9 @@ const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState('');
   const [scoreData, setScoreData] = useState(null);
+  const [aiPitch, setAiPitch] = useState('');
+  const [aiError, setAiError] = useState('');
+  const [generatingPitch, setGeneratingPitch] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,6 +83,40 @@ const Dashboard = () => {
     if (token) fetchScore(token);
   };
 
+  const generateAIPitch = async () => {
+    if (!scoreData) return;
+    setGeneratingPitch(true);
+    setAiPitch('');
+    setAiError('');
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5002/api/v1/ai/generate-pitch', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          score: scoreData.score,
+          suggestions: scoreData.suggestions
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        setAiPitch(data.pitch);
+      } else {
+        setAiError(data.message || 'Failed to generate AI pitch.');
+      }
+    } catch (err) {
+      console.error(err);
+      setAiError('Failed to connect to the AI service. Please try again later.');
+    } finally {
+      setGeneratingPitch(false);
+    }
+  };
+
   if (!user) return <div className="min-h-screen flex items-center justify-center text-white bg-black">Loading...</div>;
 
   return (
@@ -133,6 +170,53 @@ const Dashboard = () => {
                     <li key={index}>{suggestion}</li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {scoreData && (
+              <div className="mt-8 border-t border-gray-100 pt-8">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900">AI Landlord Pitch</h3>
+                    <p className="text-sm text-gray-500">Generate a professional, personalized message for landlords.</p>
+                  </div>
+                  <button
+                    onClick={generateAIPitch}
+                    disabled={generatingPitch}
+                    className="px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold shadow-lg hover:bg-gray-800 transition-all active:scale-95 disabled:opacity-70 flex items-center gap-2 border border-gray-700"
+                  >
+                    {generatingPitch ? (
+                      <span className="animate-pulse">Generating...</span>
+                    ) : (
+                      <>
+                        <svg className="w-5 h-5 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Generate Pitch
+                      </>
+                    )}
+                  </button>
+                </div>
+                {aiPitch && (
+                  <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 shadow-inner relative mt-4">
+                    <p className="text-gray-800 whitespace-pre-wrap font-medium leading-relaxed">{aiPitch}</p>
+                    <button 
+                      onClick={() => navigator.clipboard.writeText(aiPitch)}
+                      className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                      title="Copy to clipboard"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </button>
+                  </div>
+                )}
+                {aiError && (
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-xl mt-4 flex items-start gap-3">
+                    <svg className="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <div>
+                      <h4 className="text-red-800 font-bold">API Error</h4>
+                      <p className="text-red-700 text-sm mt-1">{aiError}</p>
+                      <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer" className="inline-block mt-2 text-sm text-red-600 font-bold hover:underline">Get a free Gemini API Key here →</a>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>

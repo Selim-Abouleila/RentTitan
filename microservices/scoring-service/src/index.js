@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { ApolloServer } = require('@apollo/server');
 const { expressMiddleware } = require('@apollo/server/express4');
 const { authenticateJWT } = require('./middleware/auth');
+const aiRouter = require('./routes/ai');
 const { calculateScore } = require('./scoringEngine');
 const { typeDefs } = require('./graphql/schema');
 const { resolvers } = require('./graphql/resolvers');
@@ -13,6 +14,9 @@ dotenv.config();
 const app = express();
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 app.use(express.json());
+
+// Routes
+app.use('/api/v1/ai', aiRouter);
 
 // 1. REST API Paradigm
 app.get('/api/v1/dossier-score', authenticateJWT, async (req, res) => {
