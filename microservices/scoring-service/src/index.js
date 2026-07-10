@@ -9,7 +9,8 @@ const { calculateScore } = require('./scoringEngine');
 const { typeDefs } = require('./graphql/schema');
 const { resolvers } = require('./graphql/resolvers');
 
-dotenv.config();
+const path = require('path');
+dotenv.config({ path: path.join(__dirname, '../../../.env') });
 
 const app = express();
 app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
@@ -61,7 +62,7 @@ async function startServer() {
     })
   );
 
-  const PORT = process.env.PORT || 5002;
+  const PORT = process.env.SCORING_PORT || 5002;
   app.listen(PORT, () => {
     console.log(`Scoring Service running on port ${PORT}`);
     console.log(`GraphQL endpoint ready at http://localhost:${PORT}/graphql`);

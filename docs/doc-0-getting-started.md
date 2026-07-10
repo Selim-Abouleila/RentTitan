@@ -17,12 +17,11 @@ The application relies on PostgreSQL (for users, dossiers, and scoring) and Mong
 *(Note: If you don't need the databases running right away, you can skip this until we implement the Prisma and Mongoose models).*
 
 ## 2. Configure Environment Variables
-Before starting the backend services, you must configure their `.env` files. 
+Before starting the backend services, you must configure your `.env` file. 
 
-We have provided `.env.example` templates in each service directory. Copy these templates to `.env` and fill in your missing API keys:
-1. `backend`: Copy `backend/.env.example` to `backend/.env` (Requires your Google Client ID/Secret).
-2. `document-service`: Copy `microservices/document-service/.env.example` to `microservices/document-service/.env`.
-3. `scoring-service`: Copy `microservices/scoring-service/.env.example` to `microservices/scoring-service/.env` (Requires your Google Gemini API Key).
+To keep things simple, all services share a **single** `.env` file located at the root of the `RentTitan` folder.
+1. Copy the `.env.example` file located in the root of the project and rename it to `.env`.
+2. Open `.env` and fill in your missing API keys (Google Client ID/Secret and Google Gemini API Key).
 
 ## 3. Start the Main Backend
 The main backend handles authentication and serves as the primary API gateway.
