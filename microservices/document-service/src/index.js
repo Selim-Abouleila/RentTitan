@@ -36,7 +36,7 @@ app.get('/status', authenticateJWT, async (req, res) => {
   }
 });
 
-// POST /upload - Accepts a dummy file and updates the boolean flag in MongoDB
+// POST /upload - Accepts a dummy file and updates the flags/counts in MongoDB
 app.post('/upload', authenticateJWT, upload.single('document'), async (req, res) => {
   try {
     const { documentType } = req.body;
@@ -51,16 +51,55 @@ app.post('/upload', authenticateJWT, upload.single('document'), async (req, res)
       return res.status(400).json({ error: 'Invalid document type' });
     }
 
-    // Update the specific flag to true
-    const checklist = await Checklist.findOneAndUpdate(
-      { userId: req.user.id },
-      { $set: { [documentType]: true } },
-      { new: true, upsert: true }
-    );
+    let checklist = await Checklist.findOne({ userId: req.user.id });
+    if (!checklist) {
+      checklist = new Checklist({ userId: req.user.id });
+    }
 
+    if (documentType === 'guarantorIncome') {
+      if (checklist.guarantorIncome >= 5) {
+        return res.status(400).json({ error: 'Maximum of 5 Guarantor Proof of Income documents reached.' });
+      }
+      checklist.guarantorIncome += 1;
+    } else {
+      checklist[documentType] = true;
+    }
+
+    await checklist.save();
     res.json({ message: 'Dummy document uploaded successfully', checklist });
   } catch (error) {
     console.error('Error uploading document:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// DELETE /documents/:documentType - Removes a document (decrements count or sets to false)
+app.delete('/documents/:documentType', authenticateJWT, async (req, res) => {
+  try {
+    const { documentType } = req.params;
+    
+    const validTypes = ['idCard', 'proofOfIncome', 'proofOfAddress', 'guarantorId', 'guarantorIncome'];
+    if (!validTypes.includes(documentType)) {
+      return res.status(400).json({ error: 'Invalid document type' });
+    }
+
+    let checklist = await Checklist.findOne({ userId: req.user.id });
+    if (!checklist) {
+      return res.status(404).json({ error: 'Checklist not found' });
+    }
+
+    if (documentType === 'guarantorIncome') {
+      if (checklist.guarantorIncome > 0) {
+        checklist.guarantorIncome -= 1;
+      }
+    } else {
+      checklist[documentType] = false;
+    }
+
+    await checklist.save();
+    res.json({ message: 'Document removed successfully', checklist });
+  } catch (error) {
+    console.error('Error removing document:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

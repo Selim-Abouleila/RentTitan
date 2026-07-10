@@ -6,7 +6,7 @@ const DocumentUpload = () => {
     proofOfIncome: false,
     proofOfAddress: false,
     guarantorId: false,
-    guarantorIncome: false
+    guarantorIncome: 0
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedType, setSelectedType] = useState('idCard');
@@ -34,7 +34,7 @@ const DocumentUpload = () => {
           proofOfIncome: data.proofOfIncome || false,
           proofOfAddress: data.proofOfAddress || false,
           guarantorId: data.guarantorId || false,
-          guarantorIncome: data.guarantorIncome || false
+          guarantorIncome: data.guarantorIncome || 0
         });
       }
     } catch (error) {
@@ -82,7 +82,26 @@ const DocumentUpload = () => {
     }
   };
 
-  const progressCount = Object.values(checklist).filter(Boolean).length;
+  const handleDelete = async (docType) => {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:5001/documents/${docType}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+
+      if (response.ok) {
+        setMessage('Document removed successfully.');
+        fetchStatus();
+      } else {
+        setMessage('Failed to remove document.');
+      }
+    } catch (error) {
+      setMessage('An error occurred while removing.');
+    }
+  };
+
+  const progressCount = Object.entries(checklist).filter(([k, v]) => k === 'guarantorIncome' ? v > 0 : v).length;
 
   return (
     <div className="bg-white/80 backdrop-blur-xl border border-gray-100 shadow-2xl rounded-3xl p-8 transition-all hover:shadow-3xl">
@@ -140,15 +159,29 @@ const DocumentUpload = () => {
           <h3 className="font-semibold text-gray-700 mb-4">Your Progress</h3>
           <ul className="space-y-4">
             {documentTypes.map(doc => {
-              const isUploaded = checklist[doc.value];
+              const val = checklist[doc.value];
+              const isUploaded = doc.value === 'guarantorIncome' ? val > 0 : val;
+              
               return (
-                <li key={doc.value} className="flex items-center gap-3">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${isUploaded ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
-                    {isUploaded ? '✓' : '○'}
+                <li key={doc.value} className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${isUploaded ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-400'}`}>
+                      {isUploaded ? '✓' : '○'}
+                    </div>
+                    <span className={isUploaded ? 'text-gray-800 font-medium' : 'text-gray-500'}>
+                      {doc.label}
+                      {doc.value === 'guarantorIncome' && isUploaded && <span className="ml-2 text-sm text-purple-600">({val}/5)</span>}
+                    </span>
                   </div>
-                  <span className={isUploaded ? 'text-gray-800 font-medium' : 'text-gray-500'}>
-                    {doc.label}
-                  </span>
+                  {isUploaded && (
+                    <button 
+                      onClick={() => handleDelete(doc.value)}
+                      className="text-gray-400 hover:text-red-500 text-sm font-bold w-6 h-6 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors"
+                      title="Remove Document"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </li>
               );
             })}

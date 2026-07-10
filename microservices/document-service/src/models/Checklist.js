@@ -10,7 +10,7 @@ const checklistSchema = new mongoose.Schema({
   proofOfIncome: { type: Boolean, default: false },
   proofOfAddress: { type: Boolean, default: false },
   guarantorId: { type: Boolean, default: false },
-  guarantorIncome: { type: Boolean, default: false }
+  guarantorIncome: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Checklist', checklistSchema);
