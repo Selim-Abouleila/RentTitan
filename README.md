@@ -1,6 +1,30 @@
+<div align="center">
+  <img src="docs/images/rent_titan_logo.png" alt="RentTitan Logo" width="400" />
+</div>
+
 # RentTitan
 
-RentTitan helps tenants create a clear rental dossier and receive a dossier strength score out of 100. 
+**RentTitan** is an MVP application built by Hamdi Adam Abouleila Selim & Robert Anaïs. It helps tenants create a clear, competitive rental dossier and receive a transparent dossier strength score out of 100. By aggregating financial profiles and securely managing document checklists, RentTitan calculates a deterministic score and provides actionable suggestions to help tenants secure their ideal apartment.
+
+## Architecture
+
+RentTitan utilizes a modern, distributed microservices architecture to handle authentication, document processing, and scoring logic independently.
+
+```mermaid
+graph TD
+    %% Frontend Connections
+    UI[Frontend Dashboard<br>React / Tailwind] -->|REST API| Main[Main Backend<br>Port 5000]
+    UI -->|REST API| Doc[Document Service<br>Port 5001]
+    UI -->|GraphQL API| Score[Scoring Service<br>Port 5002]
+    
+    %% Databases
+    Main -->|Prisma ORM| PG[(PostgreSQL<br>Users & Dossiers)]
+    Doc -->|Mongoose| Mongo[(MongoDB<br>Document Flags)]
+    
+    %% Microservice Inter-Communication (Token Forwarding)
+    Score -.->|HTTP GET Profile<br>JWT Forwarding| Main
+    Score -.->|HTTP GET Checklist<br>JWT Forwarding| Doc
+```
 
 ## Documentation
 | Document | Description |
@@ -12,6 +36,7 @@ RentTitan helps tenants create a clear rental dossier and receive a dossier stre
 | [Microservices Architecture](docs/doc-4-microservices.md) | Describes the modular services integration and inter-service communication. |
 
 ## Tech Stack
-- Frontend: React / Vite / TailwindCSS
-- Backend: Node.js / Express
-- Databases: PostgreSQL, MongoDB
+- **Frontend:** React / Vite / TailwindCSS
+- **Backend:** Node.js / Express / Apollo Server 4 (GraphQL)
+- **Databases:** PostgreSQL, MongoDB
+- **Authentication:** Google OAuth 2.0 & JSON Web Tokens (JWT)
