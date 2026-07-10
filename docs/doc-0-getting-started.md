@@ -16,7 +16,15 @@ The application relies on PostgreSQL (for users, dossiers, and scoring) and Mong
    ```
 *(Note: If you don't need the databases running right away, you can skip this until we implement the Prisma and Mongoose models).*
 
-## 2. Start the Main Backend
+## 2. Configure Environment Variables
+Before starting the backend services, you must configure their `.env` files. 
+
+We have provided `.env.example` templates in each service directory. Copy these templates to `.env` and fill in your missing API keys:
+1. `backend`: Copy `backend/.env.example` to `backend/.env` (Requires your Google Client ID/Secret).
+2. `document-service`: Copy `microservices/document-service/.env.example` to `microservices/document-service/.env`.
+3. `scoring-service`: Copy `microservices/scoring-service/.env.example` to `microservices/scoring-service/.env` (Requires your Google Gemini API Key).
+
+## 3. Start the Main Backend
 The main backend handles authentication and serves as the primary API gateway.
 
 1. Open a new terminal window.
@@ -39,7 +47,7 @@ The main backend handles authentication and serves as the primary API gateway.
    ```
 The backend will now be running on `http://localhost:5000`.
 
-## 3. Start the Frontend
+## 4. Start the Frontend
 The frontend is a React application built with Vite.
 
 1. Open a new terminal window.
@@ -57,7 +65,7 @@ The frontend is a React application built with Vite.
    ```
 The frontend will now be accessible in your browser at `http://localhost:5173`.
 
-## 4. (Optional) Start the Microservices
+## 5. (Optional) Start the Microservices
 Later in the MVP, you will also need to start the Document and Scoring microservices:
 
 - **Document Service:** `cd microservices/document-service && npm run dev`
