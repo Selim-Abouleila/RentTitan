@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  googleId  String   @unique
+  email     String   @unique
+  name      String
+  avatar    String?
+  
+  dossier   Dossier? 
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Dossier {
+  id               String   @id @default(uuid())
+  
+  userId           String   @unique
+  user             User     @relation(fields: [userId], references: [id])
+  
+  targetRent       Float
+  monthlyIncome    Float
+  employmentStatus String
+  
+  // One-to-many relationship: A dossier can have multiple guarantors
+  guarantors       Guarantor[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Guarantor {
+  id              String   @id @default(uuid())
+  dossierId       String
+  dossier         Dossier  @relation(fields: [dossierId], references: [id])
+  
+  name            String
+  monthlyIncome   Float
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}

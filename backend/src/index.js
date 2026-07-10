@@ -13,8 +13,11 @@ app.use(express.json());
 // Load Passport strategy
 require('./auth/passport');
 
+const dossierRoutes = require('./routes/dossier');
+
 // Routes
 app.use('/auth', authRoutes);
+app.use('/dossiers', dossierRoutes);
 
 app.get('/', (req, res) => {
   res.send('RentTitan Backend API');

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import DossierForm from './DossierForm';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -45,7 +46,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto space-y-8">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-white flex justify-between items-center">
             <div>
@@ -76,6 +77,8 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+
+        <DossierForm />
       </div>
     </div>
   );
