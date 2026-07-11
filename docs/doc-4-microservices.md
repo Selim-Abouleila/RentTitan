@@ -10,9 +10,9 @@ The Document Service handles file uploads and maintains the completion checklist
 - **Key Responsibilities:**
   - Securely validates the user's JWT.
   - Exposes `POST /upload` to accept dummy documents and update the completeness checklist.
-  - Exposes `DELETE /documents/:documentType` to remove documents.
-  - Tracks multiple guarantor proof of incomes (up to 5).
-  - Exposes `GET /status` to return the boolean completion flags.
+  - Exposes `DELETE /documents/:documentType?fileId=...` to specifically target and remove individual documents from arrays.
+  - Tracks arrays of unique files for both "Proof of Income" and "Guarantor Proof of Income" (up to 5 files each) instead of simple booleans.
+  - Exposes `GET /status` to return the completion checklist arrays and flags.
 
 ## 2. Scoring Service (Port 5002)
 The Scoring Service acts as the "brain" of the application, running a deterministic mathematical engine to calculate a transparent strength score.
