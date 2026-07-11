@@ -57,11 +57,14 @@ app.post('/upload', authenticateJWT, upload.single('document'), async (req, res)
       checklist = new Checklist({ userId: req.user.id });
     }
 
-    if (documentType === 'guarantorIncome') {
-      if (checklist.guarantorIncome >= 5) {
-        return res.status(400).json({ error: 'Maximum of 5 Guarantor Proof of Income documents reached.' });
+    if (documentType === 'guarantorIncome' || documentType === 'proofOfIncome') {
+      if (checklist[documentType] && checklist[documentType].length >= 5) {
+        return res.status(400).json({ error: `Maximum of 5 documents reached for ${documentType}.` });
       }
-      checklist.guarantorIncome += 1;
+      // Generate a unique dummy filename
+      const fileName = req.file.originalname + '_' + Math.random().toString(36).substring(7);
+      if (!checklist[documentType]) checklist[documentType] = [];
+      checklist[documentType].push(fileName);
     } else {
       checklist[documentType] = true;
     }
@@ -74,10 +77,11 @@ app.post('/upload', authenticateJWT, upload.single('document'), async (req, res)
   }
 });
 
-// DELETE /documents/:documentType: Simulates document removal by setting the corresponding checklist flag to false.
+// DELETE /documents/:documentType: Simulates document removal by setting the corresponding checklist flag to false or removing an array item.
 app.delete('/documents/:documentType', authenticateJWT, async (req, res) => {
   try {
     const { documentType } = req.params;
+    const { fileId } = req.query;
     
     const validTypes = ['idCard', 'proofOfIncome', 'proofOfAddress', 'guarantorId', 'guarantorIncome'];
     if (!validTypes.includes(documentType)) {
@@ -89,9 +93,9 @@ app.delete('/documents/:documentType', authenticateJWT, async (req, res) => {
       return res.status(404).json({ error: 'Checklist not found' });
     }
 
-    if (documentType === 'guarantorIncome') {
-      if (checklist.guarantorIncome > 0) {
-        checklist.guarantorIncome -= 1;
+    if (documentType === 'guarantorIncome' || documentType === 'proofOfIncome') {
+      if (fileId && checklist[documentType]) {
+        checklist[documentType] = checklist[documentType].filter(f => f !== fileId);
       }
     } else {
       checklist[documentType] = false;

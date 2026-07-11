@@ -12,10 +12,10 @@ const calculateScore = (dossier, checklist) => {
   // Required: idCard, proofOfIncome, proofOfAddress, guarantorId, guarantorIncome (at least 1)
   let docPoints = 0;
   if (checklist.idCard) docPoints += 5; else missingDocuments.push('Identity Card');
-  if (checklist.proofOfIncome) docPoints += 5; else missingDocuments.push('Proof of Income');
+  if (checklist.proofOfIncome && checklist.proofOfIncome.length > 0) docPoints += 5; else missingDocuments.push('Proof of Income');
   if (checklist.proofOfAddress) docPoints += 5; else missingDocuments.push('Proof of Address');
   if (checklist.guarantorId) docPoints += 5; else missingDocuments.push('Guarantor ID');
-  if (checklist.guarantorIncome > 0) docPoints += 5; else missingDocuments.push('Guarantor Proof of Income');
+  if (checklist.guarantorIncome && checklist.guarantorIncome.length > 0) docPoints += 5; else missingDocuments.push('Guarantor Proof of Income');
   
   score += docPoints;
   if (docPoints < 25) {

@@ -7,10 +7,10 @@ const checklistSchema = new mongoose.Schema({
     unique: true
   },
   idCard: { type: Boolean, default: false },
-  proofOfIncome: { type: Boolean, default: false },
+  proofOfIncome: { type: [String], default: [] },
   proofOfAddress: { type: Boolean, default: false },
   guarantorId: { type: Boolean, default: false },
-  guarantorIncome: { type: Number, default: 0 }
+  guarantorIncome: { type: [String], default: [] }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Checklist', checklistSchema);
