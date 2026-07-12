@@ -13,6 +13,9 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // [PRESENTATION NOTE] Effect hook to fetch protected user data on mount.
+    // Checks if the user is authenticated via JWT. If the token is valid, it fetches 
+    // the user's profile and dossier score. Otherwise, it logs them out.
     const fetchProtectedData = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -44,6 +47,8 @@ const Dashboard = () => {
   }, [navigate]);
 
   const fetchScore = async (token) => {
+    // [PRESENTATION NOTE] Fetches the user's dossier score using a GraphQL query.
+    // It directly targets the Scoring Service on port 5002, querying the 'myDossier' endpoint.
     try {
       const query = `
         query myDossier {
@@ -84,6 +89,9 @@ const Dashboard = () => {
   };
 
   const generateAIPitch = async () => {
+    // [PRESENTATION NOTE] Triggers the AI Landlord Pitch generation.
+    // It sends the user's score and suggestions to the Scoring Service, 
+    // which securely passes the user's financial context to the Google Gemini API to return a tailored message.
     if (!scoreData) return;
     setGeneratingPitch(true);
     setAiPitch('');

@@ -15,6 +15,7 @@ const DossierForm = ({ onSave }) => {
 
   // Fetch existing dossier on mount
   useEffect(() => {
+    // [PRESENTATION NOTE] Fetches the user's financial profile from the Main Backend on component load.
     const fetchDossier = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -77,6 +78,8 @@ const DossierForm = ({ onSave }) => {
   };
 
   const handleSubmit = async (e) => {
+    // [PRESENTATION NOTE] Saves the user's target rent, monthly income, employment status, and guarantors 
+    // to the PostgreSQL database via a secure REST API call to the Main Backend.
     e.preventDefault();
     setLoading(true);
     setMessage('');

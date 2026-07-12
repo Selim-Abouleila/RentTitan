@@ -23,6 +23,8 @@ const DocumentUpload = ({ onSave }) => {
   ];
 
   const fetchStatus = async () => {
+    // [PRESENTATION NOTE] Makes an authenticated GET request to the Document Service 
+    // to retrieve the arrays and boolean flags from the MongoDB checklist.
     const token = localStorage.getItem('token');
     try {
       const response = await fetch('http://localhost:5001/status', {
@@ -48,6 +50,8 @@ const DocumentUpload = ({ onSave }) => {
   }, []);
 
   const handleUpload = async (e) => {
+    // [PRESENTATION NOTE] Packages the dummy file into a FormData object and sends it to the 
+    // Document Service via an authenticated POST request to update the MongoDB checklist.
     e.preventDefault();
     if (!selectedFile) {
       setMessage('Please select a file first.');
@@ -89,6 +93,8 @@ const DocumentUpload = ({ onSave }) => {
   };
 
   const handleDelete = async (docType, fileId = null) => {
+    // [PRESENTATION NOTE] Sends an authenticated DELETE request to the Document Service.
+    // If it's a multi-file type (like Proof of Income), it passes the specific 'fileId' as a query parameter.
     const token = localStorage.getItem('token');
     try {
       let url = `http://localhost:5001/documents/${docType}`;
