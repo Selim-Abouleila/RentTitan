@@ -17,7 +17,7 @@ const Login = () => {
   }, [navigate]);
 
   const handleGoogleLogin = () => {
-    //  Initiates the OAuth 2.0 flow by redirecting the browser 
+    // Initiates the OAuth 2.0 flow by redirecting the browser 
     // to our Node.js backend authentication endpoint.
     window.location.href = 'http://localhost:5000/auth/google';
   };

@@ -47,7 +47,7 @@ const Dashboard = () => {
   }, [navigate]);
 
   const fetchScore = async (token) => {
-    // [PRESENTATION NOTE] Fetches the user's dossier score using a GraphQL query.
+    // Fetches the user's dossier score using a GraphQL query.
     // It directly targets the Scoring Service on port 5002, querying the 'myDossier' endpoint.
     try {
       const query = `
@@ -89,7 +89,7 @@ const Dashboard = () => {
   };
 
   const generateAIPitch = async () => {
-    // [PRESENTATION NOTE] Triggers the AI Landlord Pitch generation.
+    // Triggers the AI Landlord Pitch generation.
     // It sends the user's score and suggestions to the Scoring Service, 
     // which securely passes the user's financial context to the Google Gemini API to return a tailored message.
     if (!scoreData) return;
@@ -109,9 +109,9 @@ const Dashboard = () => {
           suggestions: scoreData.suggestions
         })
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         setAiPitch(data.pitch);
       } else {
@@ -206,7 +206,7 @@ const Dashboard = () => {
                 {aiPitch && (
                   <div className="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl border border-gray-200 shadow-inner relative mt-4">
                     <p className="text-gray-800 whitespace-pre-wrap font-medium leading-relaxed">{aiPitch}</p>
-                    <button 
+                    <button
                       onClick={() => navigator.clipboard.writeText(aiPitch)}
                       className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
                       title="Copy to clipboard"

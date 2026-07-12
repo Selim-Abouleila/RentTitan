@@ -23,7 +23,7 @@ const DocumentUpload = ({ onSave }) => {
   ];
 
   const fetchStatus = async () => {
-    // [PRESENTATION NOTE] Makes an authenticated GET request to the Document Service 
+    // Makes an authenticated GET request to the Document Service 
     // to retrieve the arrays and boolean flags from the MongoDB checklist.
     const token = localStorage.getItem('token');
     try {
@@ -50,7 +50,7 @@ const DocumentUpload = ({ onSave }) => {
   }, []);
 
   const handleUpload = async (e) => {
-    // [PRESENTATION NOTE] Packages the dummy file into a FormData object and sends it to the 
+    // Packages the dummy file into a FormData object and sends it to the 
     // Document Service via an authenticated POST request to update the MongoDB checklist.
     e.preventDefault();
     if (!selectedFile) {
@@ -93,7 +93,7 @@ const DocumentUpload = ({ onSave }) => {
   };
 
   const handleDelete = async (docType, fileId = null) => {
-    // [PRESENTATION NOTE] Sends an authenticated DELETE request to the Document Service.
+    // Sends an authenticated DELETE request to the Document Service.
     // If it's a multi-file type (like Proof of Income), it passes the specific 'fileId' as a query parameter.
     const token = localStorage.getItem('token');
     try {
@@ -134,7 +134,7 @@ const DocumentUpload = ({ onSave }) => {
           {progressCount} / 5 Uploaded
         </div>
       </div>
-      
+
       {message && (
         <div className={`p-4 rounded-xl mb-6 font-medium ${message.includes('success') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
           {message}
@@ -146,7 +146,7 @@ const DocumentUpload = ({ onSave }) => {
         <form onSubmit={handleUpload} className="space-y-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Select Document Type</label>
-            <select 
+            <select
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-purple-500 outline-none bg-white"
               value={selectedType}
               onChange={(e) => setSelectedType(e.target.value)}
@@ -156,10 +156,10 @@ const DocumentUpload = ({ onSave }) => {
               ))}
             </select>
           </div>
-          
+
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Upload File (Dummy PDF/Image)</label>
-            <input 
+            <input
               type="file"
               ref={fileInputRef}
               onChange={(e) => setSelectedFile(e.target.files[0])}
@@ -167,7 +167,7 @@ const DocumentUpload = ({ onSave }) => {
             />
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={loading || !selectedFile}
             className="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl font-bold shadow-lg shadow-purple-500/30 transform transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
@@ -184,7 +184,7 @@ const DocumentUpload = ({ onSave }) => {
               const val = checklist[doc.value];
               const isArray = Array.isArray(val);
               const isUploaded = isArray ? val.length > 0 : val;
-              
+
               if (isArray) {
                 return (
                   <li key={doc.value} className="flex flex-col gap-3">
@@ -205,7 +205,7 @@ const DocumentUpload = ({ onSave }) => {
                               <span className="text-sm font-medium text-gray-600 truncate max-w-[200px]" title={displayName}>
                                 {displayName}
                               </span>
-                              <button 
+                              <button
                                 type="button"
                                 onClick={(e) => { e.preventDefault(); handleDelete(doc.value, fileName); }}
                                 className="text-gray-400 hover:text-red-500 text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors"
@@ -221,7 +221,7 @@ const DocumentUpload = ({ onSave }) => {
                   </li>
                 );
               }
-              
+
               return (
                 <li key={doc.value} className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -233,7 +233,7 @@ const DocumentUpload = ({ onSave }) => {
                     </span>
                   </div>
                   {isUploaded && (
-                    <button 
+                    <button
                       type="button"
                       onClick={(e) => { e.preventDefault(); handleDelete(doc.value); }}
                       className="text-gray-400 hover:text-red-500 text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full hover:bg-red-50 transition-colors"

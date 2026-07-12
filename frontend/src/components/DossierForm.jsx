@@ -15,7 +15,7 @@ const DossierForm = ({ onSave }) => {
 
   // Fetch existing dossier on mount
   useEffect(() => {
-    // [PRESENTATION NOTE] Fetches the user's financial profile from the Main Backend on component load.
+    //  Fetches the user's financial profile from the Main Backend on component load.
     const fetchDossier = async () => {
       const token = localStorage.getItem('token');
       if (!token) return;
@@ -26,7 +26,7 @@ const DossierForm = ({ onSave }) => {
             'Authorization': `Bearer ${token}`
           }
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           setFormData({
@@ -78,14 +78,14 @@ const DossierForm = ({ onSave }) => {
   };
 
   const handleSubmit = async (e) => {
-    // [PRESENTATION NOTE] Saves the user's target rent, monthly income, employment status, and guarantors 
+    // Saves the user's target rent, monthly income, employment status, and guarantors 
     // to the PostgreSQL database via a secure REST API call to the Main Backend.
     e.preventDefault();
     setLoading(true);
     setMessage('');
 
     const token = localStorage.getItem('token');
-    
+
     try {
       const response = await fetch('http://localhost:5000/dossiers', {
         method: 'POST',
@@ -114,7 +114,7 @@ const DossierForm = ({ onSave }) => {
       <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-6">
         Your Financial Profile
       </h2>
-      
+
       {message && (
         <div className={`p-4 rounded-xl mb-6 font-medium ${message.includes('success') ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
           {message}
@@ -125,25 +125,25 @@ const DossierForm = ({ onSave }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Target Rent (€)</label>
-            <input 
+            <input
               type="number"
               required
               min="0"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
               value={formData.targetRent}
-              onChange={(e) => setFormData({...formData, targetRent: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, targetRent: e.target.value })}
               placeholder="e.g. 800"
             />
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Monthly Income (€)</label>
-            <input 
+            <input
               type="number"
               required
               min="0"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none"
               value={formData.monthlyIncome}
-              onChange={(e) => setFormData({...formData, monthlyIncome: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, monthlyIncome: e.target.value })}
               placeholder="e.g. 2400"
             />
           </div>
@@ -151,10 +151,10 @@ const DossierForm = ({ onSave }) => {
 
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Employment Status</label>
-          <select 
+          <select
             className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none bg-white"
             value={formData.employmentStatus}
-            onChange={(e) => setFormData({...formData, employmentStatus: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, employmentStatus: e.target.value })}
           >
             <option value="CDI">CDI (Permanent)</option>
             <option value="CDD">CDD (Fixed-term)</option>
@@ -183,7 +183,7 @@ const DossierForm = ({ onSave }) => {
             <div className="space-y-4">
               {formData.guarantors.map((guarantor, index) => (
                 <div key={index} className="p-5 bg-gray-50 rounded-2xl border border-gray-100 relative group">
-                  <button 
+                  <button
                     type="button"
                     onClick={() => handleRemoveGuarantor(index)}
                     className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition-colors"
@@ -194,7 +194,7 @@ const DossierForm = ({ onSave }) => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 mb-1">Full Name</label>
-                      <input 
+                      <input
                         type="text"
                         required
                         className="w-full px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-indigo-500 outline-none"
@@ -205,7 +205,7 @@ const DossierForm = ({ onSave }) => {
                     </div>
                     <div>
                       <label className="block text-xs font-semibold text-gray-500 mb-1">Monthly Income (€)</label>
-                      <input 
+                      <input
                         type="number"
                         required
                         min="0"
@@ -222,7 +222,7 @@ const DossierForm = ({ onSave }) => {
           )}
         </div>
 
-        <button 
+        <button
           type="submit"
           disabled={loading}
           className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transform transition-all hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
@@ -243,18 +243,18 @@ const DossierForm = ({ onSave }) => {
             <h3 className="text-2xl font-bold text-center text-gray-900 mb-2">Delete Guarantor?</h3>
             <p className="text-center text-gray-500 mb-8 font-medium">
               Are you sure you want to delete <span className="text-gray-800 font-bold">{formData.guarantors[guarantorToDelete]?.name || `Guarantor ${guarantorToDelete + 1}`}</span>?
-              <br/><br/>
+              <br /><br />
               <span className="text-xs opacity-75">This will be permanently removed from the database when you save your profile.</span>
             </p>
             <div className="flex gap-4">
-              <button 
+              <button
                 type="button"
                 onClick={cancelDeleteGuarantor}
                 className="flex-1 px-4 py-3 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-colors"
               >
                 Cancel
               </button>
-              <button 
+              <button
                 type="button"
                 onClick={confirmDeleteGuarantor}
                 className="flex-1 px-4 py-3 text-white bg-red-600 hover:bg-red-700 rounded-xl font-bold shadow-lg shadow-red-500/30 transition-all hover:-translate-y-0.5"
